@@ -1,0 +1,23 @@
+.container{
+    border: solid cyan 3px;
+}
+
+.child {
+    border: solid red 2px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.div {
+    border: solid black 1px;
+    display: flex;
+    height: 40px;
+}
+
+
+.btn{
+    width: 25%;
+    height: 100%;
+}
