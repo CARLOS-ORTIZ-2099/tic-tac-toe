@@ -1,4 +1,4 @@
-const arr = [
+let array = [
     ["","",""],
     ["","",""],
     ["","",""]
@@ -13,29 +13,51 @@ const posicionesGanadoras = [
 let count = 0
 const d = document
 const container = d.querySelector('.container')
-const child = d.querySelector('.child')
-const jugador = d.querySelector('.jugador')
+const hijo = d.querySelector('.hijo')
 const btnReinicio = document.querySelector('.btn-reinicio')
+const nameG = d.querySelector('.nameGamer')
+let turn = true
 
-btnReinicio.addEventListener('click', () => {
+function reiniciarJuego() {
+    array = [
+      ["", "", ""],
+      ["", "", ""],
+      ["", "", ""]
+    ];
+  
+    const buttons = Array.from(document.querySelectorAll('.btn'));
+  
+    buttons.forEach(button => {
+      button.textContent = "";
+    });
+  
+    count = 0;
+  }
+  
+  // Luego, puedes llamar a esta función dentro del evento del botón de reinicio:
+  
+  btnReinicio.addEventListener('click', (e) => {
+    btnReinicio.classList.add('hidden')
+    turn = true
+    reiniciarJuego();
     valor()
-})
+  });
 
+  
 function valor() {
-    
-
-    let response =  arr.map(celdas => {
+    nameG.textContent = turn ? 'X' : 'O';
+    let response =  array.map(celdas => {
             let buttons =  celdas.map(celda => {
                 return `<button class='btn'>${celda}</button>`
             })  
-            /* console.log(buttons)
-            console.log(`<div>${ buttons.join('')}</div>`) */
+            /*  console.log(buttons)
+            console.log(`<div>${ buttons.join('')}</div>`)  */
         
             return `<div class='div'>${ buttons.join('')}</div>`
      })   
-     // console.log(response)
+      // console.log(response)
      
-     child.innerHTML = response.join('')
+      hijo.innerHTML = response.join('')
      let buttons = Array.from(document.querySelectorAll('.btn'))
      recorrido(buttons)
 } 
@@ -47,8 +69,9 @@ function recorrido(buttons){
     buttons.forEach((button, index) => {
         button.addEventListener('click',((e) => {
            //console.log(index)
-           let columna = index%3
            let fila = parseInt(index/3)
+           let columna = index%3
+           
            console.log(fila, columna)
 
             if(count%2==0){
@@ -56,32 +79,26 @@ function recorrido(buttons){
                 let buttonsDom = d.querySelectorAll('.btn')
                 console.log(buttonsDom)
                 count++
-                arr[fila][columna] = 'X'
-                e.target.textContent = arr[fila][columna]
-                console.log(arr)
-                
+                array[fila][columna] = 'X'
+                e.target.textContent = array[fila][columna]
+                console.log(array)
+                changePlayer()
                 verificarGanador(buttonsDom, e.target.textContent)
-  
             }
             else {
                 //e.target.textContent = 'O'
                 let buttonsDom = d.querySelectorAll('.btn')
                 count++
-                arr[fila][columna] = 'O'
-                e.target.textContent = arr[fila][columna]
-                console.log(arr)
-
-                verificarGanador(buttonsDom, e.target.textContent)
-         
-                
+                array[fila][columna] = 'O'
+                e.target.textContent = array[fila][columna]
+                console.log(array)
+                changePlayer()
+                verificarGanador(buttonsDom, e.target.textContent)        
             }
 
         }), {once:true})
-
     })
-
 }
-
 
 function verificarGanador(btns,figure){
     let response = posicionesGanadoras.some(subArray => {
@@ -95,15 +112,17 @@ function verificarGanador(btns,figure){
     console.log(response)
     if(response){
         alert('ha ganado '+ figure)
-      
+       btnReinicio.classList.remove('hidden')
     }
-    else if(!response && arr.every(subArray => !subArray.includes(''))){
+    else if(!response && array.every(subArray => !subArray.includes(''))){
         alert('empate')
-      
+        btnReinicio.classList.remove('hidden')
     }
     
 }
 
-
-
+function changePlayer(){
+    turn = !turn;
+    nameG.textContent = turn ? 'X' : 'O';
+}
 
