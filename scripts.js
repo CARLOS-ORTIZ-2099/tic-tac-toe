@@ -1,128 +1,111 @@
-let array = [
-    ["","",""],
-    ["","",""],
-    ["","",""]
-]
-
-const posicionesGanadoras = [
-    [0,1,2], [3,4,5], [6,7,8],
-    [0,3,6], [1,4,7], [2,5,8],
-    [0,4,8], [2,4,6]
-]
-
-let count = 0
 const d = document
-const container = d.querySelector('.container')
-const hijo = d.querySelector('.hijo')
-const btnReinicio = document.querySelector('.btn-reinicio')
-const nameG = d.querySelector('.nameGamer')
+const tableroContainer = d.querySelector('.tablero-container')
+const namePlayer = d.querySelector('.name-player')
+const buttonReiniciar = d.querySelector('.btn-reiniciar')
+const buttonContainer = d.querySelector('.button-container')
+let count = 0
 let turn = true
 
-function reiniciarJuego() {
-    array = [
-      ["", "", ""],
-      ["", "", ""],
-      ["", "", ""]
-    ];
-  
-    const buttons = Array.from(document.querySelectorAll('.btn'));
-  
-    buttons.forEach(button => {
-      button.textContent = "";
-    });
-  
-    count = 0;
-  }
-  
-  // Luego, puedes llamar a esta función dentro del evento del botón de reinicio:
-  
-  btnReinicio.addEventListener('click', (e) => {
-    btnReinicio.classList.add('hidden')
+let table =  [
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', ''],
+]
+
+const winnerPosition = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [2, 4, 6],
+    [0, 4, 8],
+]
+
+buttonReiniciar.addEventListener('click', (e) => {
+    table = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', ''],
+    ]
+   /*  const buttons = d.querySelectorAll('.btn') */
+    count = 0
     turn = true
-    reiniciarJuego();
-    valor()
-  });
+    startGame()
+})
 
-  
-function valor() {
-    nameG.textContent = turn ? 'X' : 'O';
-    let response =  array.map(celdas => {
-            let buttons =  celdas.map(celda => {
-                return `<button class='btn'>${celda}</button>`
-            })  
-            /*  console.log(buttons)
-            console.log(`<div>${ buttons.join('')}</div>`)  */
-        
-            return `<div class='div'>${ buttons.join('')}</div>`
-     })   
-      // console.log(response)
-     
-      hijo.innerHTML = response.join('')
-     let buttons = Array.from(document.querySelectorAll('.btn'))
-     recorrido(buttons)
-} 
 
-valor()
+function startGame() {
+    buttonContainer.classList.add('hidden')
+    namePlayer.textContent = turn? 'es turno de X': ' es turno de O'
 
-function recorrido(buttons){
-
-    buttons.forEach((button, index) => {
-        button.addEventListener('click',((e) => {
-           //console.log(index)
-           let fila = parseInt(index/3)
-           let columna = index%3
-           
-           console.log(fila, columna)
-
-            if(count%2==0){
-                //e.target.textContent = 'X'
-                let buttonsDom = d.querySelectorAll('.btn')
-                console.log(buttonsDom)
-                count++
-                array[fila][columna] = 'X'
-                e.target.textContent = array[fila][columna]
-                console.log(array)
-                changePlayer()
-                verificarGanador(buttonsDom, e.target.textContent)
-            }
-            else {
-                //e.target.textContent = 'O'
-                let buttonsDom = d.querySelectorAll('.btn')
-                count++
-                array[fila][columna] = 'O'
-                e.target.textContent = array[fila][columna]
-                console.log(array)
-                changePlayer()
-                verificarGanador(buttonsDom, e.target.textContent)        
-            }
-
-        }), {once:true})
-    })
+       let result = table.map(subArray => {
+            let resp =  subArray.map(celda => {
+                return  `<button class='btn'>${celda}</button>`
+            })
+           // console.log(resp)
+             return `<div class='div'>${resp.join('')}</div>`
+       }) 
+       console.log(result)
+       tableroContainer.innerHTML = result.join('')
+       const buttons = Array.from(document.querySelectorAll('.btn'))
+       tarea(buttons)
 }
 
-function verificarGanador(btns,figure){
-    let response = posicionesGanadoras.some(subArray => {
-            
-        return subArray.every(position => {
+startGame()
 
-            return btns[position].textContent == figure
+
+function tarea(btns){
+    btns.forEach((button, index) => {
+        button.addEventListener('click', (e) => clickButton(e,index), {once:true}) 
+    })
+
+    function clickButton(e,indice){
+   
+        let columna = indice % 3
+        let fila = parseInt(indice/3)
+        
+        if(count%2==0){
+            
+            table[fila][columna] = 'x'
+           // console.log(table)
+           btns[indice].textContent = table[fila][columna]
+            changeTurn()
+            checkWinner(btns,'x')
+        
+        }
+        else {
+           
+            table[fila][columna] = 'o'
+            //console.log(table)
+            btns[indice].textContent = table[fila][columna]
+            changeTurn()
+             checkWinner(btns,'o')
+            
+        }
+        count++
+    }
+}
+
+function checkWinner(btns,figure) {
+   let response = winnerPosition.some(element => {
+        return element.every(ele => {
+            return btns[ele].textContent== figure
         })
     })
-
-    console.log(response)
+ 
     if(response){
-        alert('ha ganado '+ figure)
-       btnReinicio.classList.remove('hidden')
+        alert('ha ganado '+ ' '+ figure)
+        buttonContainer.classList.remove('hidden')
     }
-    else if(!response && array.every(subArray => !subArray.includes(''))){
-        alert('empate')
-        btnReinicio.classList.remove('hidden')
+    else if(table.every(ele => !ele.includes(''))){
+        alert('se ha empatado')
+        buttonContainer.classList.remove('hidden')
     }
-    
 }
 
-function changePlayer(){
-    turn = !turn;
-    nameG.textContent = turn ? 'X' : 'O';
+function changeTurn() {
+    turn = !turn
+    namePlayer.textContent = turn? 'es turno de X': 'es turno de O'
 }
-

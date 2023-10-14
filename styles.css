@@ -1,33 +1,70 @@
 body{
-    background-color: gray;
+    background: linear-gradient(to bottom, cyan , rgb(33, 152, 231));
+    background-repeat: no-repeat;
+    min-height: 100vh;
 }
 
-.container{
-    border: solid cyan 3px;
-}
 
-.child {
-    border: solid red 2px;
-    width: 50%;
-    display: flex;
-    flex-direction: column;
+
+ .tablero-container{
     
+    display: grid;
+    grid-template-columns: repeat(3, minmax(90px, 90px));
+    grid-template-rows: repeat(3, minmax(90px, 90px));
+    justify-content: center;
 }
-
-.div {
-    border: solid black 1px;
-    display: flex;
-    height: 40px;
-}
-
 
 .btn{
-    width: 25%;
-    height: 100%;
+    width:90px;
+    height: 90px;
+    border: solid rgb(18, 18, 19) 4px;
+    color: rgb(46, 115, 218);
+    font-weight: bold;
+    font-size: 50px;
+}
+.btn:hover {
+    cursor: pointer;
+}
+
+
+.name-player{
+    width: 50%;
+    margin: 0 auto;
+    height: 150px;
+    margin-bottom: 2rem;
+    text-align: center;
+    margin-top: 2rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: aliceblue;
+    font-weight: bold;
+    font-size: 2rem;
 }
 
 .hidden{
     display: none;
+}
+
+
+
+.button-container{
+    background:rgba(0, 0, 0, .5);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    height: 100%;
+    left: 0;
+    right: 0;
+}
+
+.btn-reiniciar{
+    display: block;
+    background-color: rgb(44, 125, 230);
+    margin:  0 auto;
+    width: 200px;
+    height: 50px;
+    border-radius: 5px;
+    color: aliceblue;
+    font-weight: bold;
 }
 
 
